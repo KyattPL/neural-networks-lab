@@ -1,22 +1,34 @@
 import numpy as np
 from random import randint, random
 
-DATA_SIZE = 40
+DATA_SIZE = 100
 DIST_FROM_OG = 0.1
 
 
 def rand_and_num():
     sign = randint(0, 1)
+    sign_snd = randint(0, 1)
+
     if sign == 0:
         sign = -1
-    return (randint(0, 1) + random() * DIST_FROM_OG) * sign
+
+    if sign_snd == 0:
+        sign_snd = -1
+
+    return (randint(0, 1) + random() * DIST_FROM_OG * sign) * sign_snd
 
 
 def rand_and_num_bipolar():
     sign = randint(0, 1)
+    sign_snd = randint(0, 1)
+
     if sign == 0:
         sign = -1
-    return (1 + random() * DIST_FROM_OG) * sign
+
+    if sign_snd == 0:
+        sign_snd = -1
+
+    return (1 + random() * DIST_FROM_OG * sign) * sign_snd
 
 
 def generate_data():

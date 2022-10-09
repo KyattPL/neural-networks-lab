@@ -77,6 +77,7 @@ def experiment(weight_init):
         epochNum += 1
 
     #print(f"Epoch: {epochNum}")
+    # print(weights)
     check_test_data(test, weights, testOut)
     return epochNum
 

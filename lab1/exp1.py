@@ -77,11 +77,12 @@ def experiment(theta):
 
     #print(f"Epoch: {epochNum}")
     check_test_data(test, weights, testOut, theta)
+    # print(weights)
     return epochNum
 
 
 if __name__ == "__main__":
-    thetas = [0.1, 0.125, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5]
+    thetas = [0.1, 0.125, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.8]
     for theta in thetas:
         epochSum = 0
         print(f"Theta: {theta}")
