@@ -2,7 +2,7 @@ import numpy as np
 from random import randint, random
 
 DATA_SIZE = 100
-DIST_FROM_OG = 0.1
+DIST_FROM_OG = 0.2
 
 
 def rand_and_num():
@@ -37,8 +37,7 @@ def generate_data():
 
     for i in range(DATA_SIZE):
         inputs[i] = [rand_and_num(), rand_and_num()]
-        # XD? Skąd mam wiedzieć jak blisko tego prawego górnego mam uznawać za 1?
-        if inputs[i][0] > 0.9 and inputs[i][1] > 0.9:
+        if inputs[i][0] > 0.8 and inputs[i][1] > 0.8:
             outputs[i] = 1
         else:
             outputs[i] = 0
@@ -53,8 +52,7 @@ def generate_data_bipolar():
 
     for i in range(DATA_SIZE):
         inputs[i] = [rand_and_num_bipolar(), rand_and_num_bipolar()]
-        # XD? Skąd mam wiedzieć jak blisko tego prawego górnego mam uznawać za 1?
-        if inputs[i][0] > 0.9 and inputs[i][1] > 0.9:
+        if inputs[i][0] > 0.8 and inputs[i][1] > 0.8:
             outputs[i] = 1
         else:
             outputs[i] = -1
