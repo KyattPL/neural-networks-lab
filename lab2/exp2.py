@@ -7,7 +7,7 @@ TRAIN_SIZE = int(DATA_SIZE * TRAIN_PERCENT)
 TEST_SIZE = DATA_SIZE - TRAIN_SIZE
 
 
-WEIGHT_INIT = 0.1
+WEIGHT_INIT = 0.001
 ALLOWED_ERR = 0.4
 
 
@@ -63,16 +63,20 @@ def experiment(learningCoef):
         epochNum += 1
 
     check_test_data(test, weights, testOut)
-    return epochNum
+    return epochNum, weights
 
 
 if __name__ == "__main__":
-    learningCoefs = [0.5, 0.2, 0.1]
+    learningCoefs = [0.3, 0.2, 0.1, 0.05, 0.025, 0.01, 0.001, 0.0001, 0.00001]
     for learningCoef in learningCoefs:
         epochSum = 0
+        weightsSum = np.zeros(3)
         print(f"Learning coef: {learningCoef}")
 
         for i in range(10):
-            epochSum += experiment(learningCoef)
+            epochs, weights = experiment(learningCoef)
+            epochSum += epochs
+            weightsSum += weights
 
-        print(f"Avg epochs num: {epochSum / 10}")
+        print(f"\tAvg epochs num: {epochSum / 10}")
+        print(f"\tAvg weights: {weightsSum / 10}")

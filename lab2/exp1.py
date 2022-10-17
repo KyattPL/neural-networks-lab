@@ -63,16 +63,20 @@ def experiment(weightInit):
         epochNum += 1
 
     check_test_data(test, weights, testOut)
-    return epochNum
+    return epochNum, weights
 
 
 if __name__ == "__main__":
     weightInits = [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1]
     for weightInit in weightInits:
         epochSum = 0
+        weightsSum = np.zeros(3)
         print(f"Weights: {weightInit * -1} to {weightInit}")
 
         for i in range(10):
-            epochSum += experiment(weightInit)
+            epochs, weights = experiment(weightInit)
+            epochSum += epochs
+            weightsSum += weights
 
-        print(f"Avg epochs num: {epochSum / 10}")
+        print(f"\tAvg epochs num: {epochSum / 10}")
+        print(f"\tAvg weights: {weightsSum / 10}")
