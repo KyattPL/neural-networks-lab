@@ -14,9 +14,9 @@ if __name__ == "__main__":
     network = MLP(layers=4, neuronsInLayers=[
                   3, 4, 4, 2], activationFuncs=[relu, relu, softmax])
     network.read_from_csv()
-    # print(network.weights)
+    print(network.weights)
 
-    # network.calc_outputs(testInp)
+    network.calc_outputs(testInp)
 
-    # print(network.activations)
-    # print(network.stimulations)
+    print(network.activations)
+    print(network.stimulations)
