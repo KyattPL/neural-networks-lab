@@ -1,10 +1,9 @@
 import numpy as np
-import csv
 
 
 class MLP:
 
-    def __init__(self, layers, neuronsInLayers, activationFuncs) -> None:
+    def __init__(self, layers, neuronsInLayers, activationFuncs, standardDev) -> None:
         self.howManyLayers = layers
         self.activationFuncs = activationFuncs
         self.weights = []
@@ -15,10 +14,8 @@ class MLP:
         for index in range(len(neuronsInLayers) - 1):
             cur = neuronsInLayers[index]
             next = neuronsInLayers[index + 1]
-            stdDeviation = np.random.random()
-            self.weights.append(np.random.normal(0, stdDeviation, (cur, next)))
-
-            self.biases.append(np.random.normal(0, stdDeviation, next))
+            self.weights.append(np.random.normal(0, standardDev, (cur, next)))
+            self.biases.append(np.random.normal(0, standardDev, next))
 
     def calc_outputs(self, input):
         stimulations = []
@@ -41,9 +38,15 @@ class MLP:
 
     def save_to_csv(self):
         np.savez('weights.csv', *self.weights)
+        np.savez('biases.csv', *self.biases)
 
     def read_from_csv(self):
-        files = np.load('weights.csv.npz')
+        weightsData = np.load('weights.csv.npz')
         self.weights = []
-        for name in files.files:
-            self.weights.append(files[name])
+        for name in weightsData.files:
+            self.weights.append(weightsData[name])
+        
+        biasesData = np.load('biases.csv.npz')
+        self.biases = []
+        for name in biasesData.files:
+            self.biases.append(biasesData[name])

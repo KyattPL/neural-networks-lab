@@ -1,6 +1,10 @@
 import numpy as np
 
 
+def linear(stimulations):
+    return stimulations
+
+
 def softmax(stimulations):
     denominator = 0
 
@@ -40,3 +44,15 @@ def relu(stimulations):
             activated.append(z)
 
     return activated
+
+
+def max_label(outputs):
+    maxIndex = 0
+    maxPred = outputs[0]
+    
+    for (index, output) in enumerate(outputs):
+        if output > maxPred:
+            maxPred = output
+            maxIndex = index
+    
+    return maxIndex
