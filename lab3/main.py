@@ -12,7 +12,7 @@ if __name__ == "__main__":
     x_test = np.reshape(x_test, (10_000, 784))
 
     network = MLP(layers=4, neuronsInLayers=[
-                  784, 500, 500, 10], activationFuncs=[relu, relu, softmax],
+                  784, 250, 150, 10], activationFuncs=[relu, relu, softmax],
                   standardDev=0.01)
 
     i = 0
@@ -25,6 +25,11 @@ if __name__ == "__main__":
         for j in range(BATCH_SIZE):
             network.calc_outputs(batch_x[j])
             network.calc_errors(label_to_vector(batch_y[j]), j)
+        
+        i += 1
+        network.update_weights(batch_x)
+        print(network.weights)
+        input()
         
         # Update weights
 

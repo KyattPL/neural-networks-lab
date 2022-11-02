@@ -2,6 +2,7 @@ import numpy as np
 from utils import get_derivative, get_derivative_single,max_label
 
 BATCH_SIZE = 500
+LEARNING_COEF = 0.0001
 
 class MLP:
 
@@ -59,15 +60,34 @@ class MLP:
             errors_layer = []
             derivative = get_derivative_single(self.activationFuncs[act_fun_index - 1 - l])
             weights = self.weights[end_layer_index - 1 - l]
-            for k in range(self.neuronsInLayers[self.howManyLayers - 1 - l]):
-                dx = derivative(self.stimulations[inputIndex][end_layer_index - 1 - l][k])
-                deltas_weights = np.sum(np.dot(errors_in_input[l], weights[l][k]))
+            for k in range(self.neuronsInLayers[end_layer_index - 1 - l]):
+                dx = derivative(self.stimulations[inputIndex][end_layer_index - 2 - l][k])
+                deltas_weights = np.sum(np.dot(errors_in_input[l], weights[k]))
                 delta = deltas_weights * dx
                 errors_layer.append(delta)
             errors_in_input.append(errors_layer)
 
         errors_in_input.reverse()
         self.errors.append(errors_in_input)
+
+    
+    def update_weights(self, inputs):
+        first_weights = self.weights[0]
+        self.weights[0] += LEARNING_COEF * np.multiply(inputs, self.errors)
+        # for r in range(len(first_weights)):
+        #     for c in range(len(first_weights[r])):
+        #         increase = 0
+        #         for i in range(BATCH_SIZE):
+        #             increase += inputs[i][r] * self.errors[i][0][c]
+        #         self.weights[0][r][c] += LEARNING_COEF * increase
+
+        for l in range(self.howManyLayers - 2):
+            for r in range(self.weights[1 + l]):
+                for c in range(self.weights[1 + l][r]):
+                    increase = 0
+                    for i in range(BATCH_SIZE):
+                        increase += self.activations[i][1 + l][c] * self.errors[i][1 + l][c]
+                    self.weights[1 + l][r][c] += LEARNING_COEF * increase
 
     def calc_activations(self, stimulated, activationFunc):
         return activationFunc(stimulated)
