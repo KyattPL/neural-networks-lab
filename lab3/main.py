@@ -12,8 +12,8 @@ if __name__ == "__main__":
     x_train = np.reshape(x_train, (DATASET_SIZE, 784))
     x_test = np.reshape(x_test, (TEST_SIZE, 784))
 
-    network = MLP(layers=4, neuronsInLayers=[
-                  784, 400, 200, 10], activationFuncs=[relu, relu, softmax],
+    network = MLP(layers=3, neuronsInLayers=[
+                  784, 50, 10], activationFuncs=[sigmoid, softmax],
                   standardDev=0.1)
 
     i = 0
@@ -35,6 +35,7 @@ if __name__ == "__main__":
     correct = 0
     for i in range(TEST_SIZE):
         activs = network.test_input(x_test[i])
+        # print(max_label(activs), y_test[i])
         label = max_label(activs)
         if label == y_test[i]:
             correct += 1
