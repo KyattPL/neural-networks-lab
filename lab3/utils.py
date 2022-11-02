@@ -9,6 +9,10 @@ def dx_linear(stimulations):
     return np.ones(len(stimulations))
 
 
+def dx_linear_single(stim):
+    return 1
+
+
 def softmax(stimulations):
     denominator = 0
 
@@ -41,6 +45,10 @@ def dx_sigmoid(stimulations):
     return results
 
 
+def dx_sigmoid_single(stim):
+    return sigmoid_single(stim) * (1 - sigmoid_single(stim))
+
+
 def hyper_tangent(stimulations):
     activated = []
     for z in stimulations:
@@ -58,6 +66,10 @@ def dx_hyper_tangent(stimulations):
         results.append(1 - np.power(htan_single(stim), 2))
 
     return results
+
+
+def dx_htan_single(stim):
+    return 1 - np.power(htan_single(stim), 2)
 
 
 def relu(stimulations):
@@ -87,6 +99,10 @@ def dx_relu(stimulations):
     return results
 
 
+def dx_relu_single(stim):
+    return 1 if stim > 0 else 0
+
+
 def softplus(stimulations):
     activations = []
     for z in stimulations:
@@ -103,6 +119,10 @@ def dx_softplus(stimulations):
     return results
 
 
+def dx_softplus_single(stim):
+    return 1 / (1 + np.power(np.e, -stim))
+
+
 def get_derivative(act_fn):
     if act_fn == linear:
         return dx_linear
@@ -115,6 +135,18 @@ def get_derivative(act_fn):
     else:
         return dx_softplus
 
+
+def get_derivative_single(act_fn):
+    if act_fn == linear:
+        return dx_linear_single
+    elif act_fn == sigmoid:
+        return dx_sigmoid_single
+    elif act_fn == hyper_tangent:
+        return dx_htan_single
+    elif act_fn == relu:
+        return dx_relu_single
+    else:
+        return dx_softplus_single
 
 def max_label(outputs):
     maxIndex = 0
@@ -134,3 +166,9 @@ def NLL(predictions):
         results.append(-np.log(pred))
     
     return results
+
+
+def label_to_vector(label):
+    output = [0,0,0,0,0,0,0,0,0,0]
+    output[label] = 1
+    return output
