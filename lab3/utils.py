@@ -168,6 +168,7 @@ def NLL(predictions):
     return results
 
 
+# TODO: czy o to chodzi?
 def label_to_vector(label):
     output = [0,0,0,0,0,0,0,0,0,0]
     output[label] = 1
