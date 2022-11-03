@@ -1,12 +1,11 @@
 import numpy as np
 from utils import get_derivative_single
 
-BATCH_SIZE = 500
-LEARNING_COEF = 1e-8
+LEARNING_COEF = 1e-5
 
 class MLP:
 
-    def __init__(self, layers, neuronsInLayers, activationFuncs, standardDev) -> None:
+    def __init__(self, layers, neuronsInLayers, activationFuncs, standardDev, batchSize) -> None:
         self.howManyLayers = layers
         self.neuronsInLayers = neuronsInLayers
         self.activationFuncs = activationFuncs
@@ -15,6 +14,7 @@ class MLP:
         self.stimulations = []
         self.activations = []
         self.errors = []
+        self.batchSize = batchSize
 
         for index in range(len(neuronsInLayers) - 1):
             cur = neuronsInLayers[index]
@@ -76,6 +76,7 @@ class MLP:
             first_layer.append(arr[0])
 
         self.weights[0] += LEARNING_COEF * np.matmul(np.array(inputs).transpose(), first_layer)
+        self.biases[0] += LEARNING_COEF * np.sum(first_layer, axis=0)
 
         for l in range(self.howManyLayers - 2):
             nth_layer = []
@@ -85,7 +86,10 @@ class MLP:
             for arr in self.activations:
                 nth_activs.append(arr[l])
             self.weights[1 + l] += LEARNING_COEF * np.matmul(np.array(nth_activs).transpose(), nth_layer)
+            self.biases[1 + l] += LEARNING_COEF * np.sum(nth_layer, axis=0)
 
+        # print(self.weights)
+        # input()
 
     def calc_activations(self, stimulated, activationFunc):
         return activationFunc(stimulated)
