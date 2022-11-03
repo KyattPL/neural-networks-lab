@@ -13,9 +13,10 @@ if __name__ == "__main__":
     x_test = np.reshape(x_test, (TEST_SIZE, 784))
 
     network = MLP(layers=3, neuronsInLayers=[
-                  784, 50, 10], activationFuncs=[sigmoid, softmax],
-                  standardDev=0.1)
+                  784, 100, 10], activationFuncs=[sigmoid, softmax],
+                  standardDev=0.01)
 
+    # TODO: losować przed epoką/po epoce wzorce (żeby losowo batche były)
     i = 0
     while i < DATASET_SIZE / BATCH_SIZE:
         network.activations = []
