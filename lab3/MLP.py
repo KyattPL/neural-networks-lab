@@ -2,7 +2,7 @@ import numpy as np
 from utils import get_derivative_single
 
 BATCH_SIZE = 500
-LEARNING_COEF = 1e-8
+LEARNING_COEF = 1e-6
 
 class MLP:
 
