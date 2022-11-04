@@ -19,7 +19,7 @@ if __name__ == "__main__":
     x_test = np.reshape(x_test, (TEST_SIZE, 784))
 
     network = MLP(layers=3, neuronsInLayers=[
-                  784, 5, 10], activationFuncs=[sigmoid, softmax],
+                  784, 10, 10], activationFuncs=[sigmoid, softmax],
                   standardDev=0.01, batchSize=BATCH_SIZE)
 
     # TODO: losować przed epoką/po epoce wzorce (żeby losowo batche były)
@@ -45,10 +45,6 @@ if __name__ == "__main__":
         correct = 0
         for i in range(TEST_SIZE):
             activs = network.test_input(x_test[i])
-<<<<<<< HEAD
-            # print(max_label(activs), y_test[i])
-=======
->>>>>>> effaed5798c30a40edfe5e2165e33d701be36dbb
             label = max_label(activs)
             if label == y_test[i]:
                 correct += 1

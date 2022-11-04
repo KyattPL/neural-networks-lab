@@ -75,8 +75,8 @@ class MLP:
         for arr in self.errors:
             first_layer.append(arr[0])
 
-        self.weights[0] += LEARNING_COEF * np.matmul(np.array(inputs).transpose(), first_layer)
-        self.biases[0] += LEARNING_COEF * np.sum(first_layer, axis=0)
+        self.weights[0] += LEARNING_COEF * np.matmul(np.array(inputs).transpose(), np.array(first_layer, dtype=np.float32))
+        self.biases[0] += LEARNING_COEF * np.sum(np.array(first_layer, dtype=np.float32), axis=0)
 
         for l in range(self.howManyLayers - 2):
             nth_layer = []
@@ -85,8 +85,8 @@ class MLP:
                 nth_layer.append(arr[l + 1])
             for arr in self.activations:
                 nth_activs.append(arr[l])
-            self.weights[1 + l] += LEARNING_COEF * np.matmul(np.array(nth_activs).transpose(), nth_layer)
-            self.biases[1 + l] += LEARNING_COEF * np.sum(nth_layer, axis=0)
+            self.weights[1 + l] += LEARNING_COEF * np.matmul(np.array(nth_activs).transpose(), np.array(nth_layer, dtype=np.float32))
+            self.biases[1 + l] += LEARNING_COEF * np.sum(np.array(nth_layer, dtype=np.float32), axis=0)
 
         # print(self.weights)
         # input()
