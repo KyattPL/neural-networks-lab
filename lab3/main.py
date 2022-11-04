@@ -5,7 +5,12 @@ from keras.datasets import mnist
 DATASET_SIZE = 60_000
 TEST_SIZE = 10_000
 BATCH_SIZE = 500
-EPOCHS_NUM = 5
+EPOCH_NUM = 10
+
+def shuffle_training_data(x_train, y_train):
+    perm = np.random.permutation(len(x_train))
+    return x_train[perm], y_train[perm]
+
 
 if __name__ == "__main__":
     (x_train, y_train), (x_test, y_test) = mnist.load_data()
@@ -15,12 +20,22 @@ if __name__ == "__main__":
 
     network = MLP(layers=3, neuronsInLayers=[
                   784, 5, 10], activationFuncs=[sigmoid, softmax],
+<<<<<<< HEAD
                   standardDev=0.01)
 
     # TODO: losować przed epoką/po epoce wzorce (żeby losowo batche były)
     epochs = 0
     while epochs < EPOCHS_NUM:
         i = 0
+=======
+                  standardDev=0.01, batchSize=BATCH_SIZE)
+
+    # TODO: losować przed epoką/po epoce wzorce (żeby losowo batche były)
+    epochs = 0
+    while epochs < EPOCH_NUM:
+        i = 0
+        x_train, y_train = shuffle_training_data(x_train, y_train)
+>>>>>>> effaed5798c30a40edfe5e2165e33d701be36dbb
         while i < DATASET_SIZE / BATCH_SIZE:
             network.activations = []
             network.stimulations = []
@@ -39,7 +54,10 @@ if __name__ == "__main__":
         correct = 0
         for i in range(TEST_SIZE):
             activs = network.test_input(x_test[i])
+<<<<<<< HEAD
             # print(max_label(activs), y_test[i])
+=======
+>>>>>>> effaed5798c30a40edfe5e2165e33d701be36dbb
             label = max_label(activs)
             if label == y_test[i]:
                 correct += 1
