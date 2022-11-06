@@ -45,16 +45,23 @@ class MLP:
 
         derivative = get_derivative_single(self.activationFuncs[act_fun_index])
         errors_in_input = []
-        errors_layer = []
-        for k in range(self.neuronsInLayers[end_layer_index]):
-            predicted = self.activations[inputIndex][end_layer_index - 1][k]
-            label = correct[k]
-            # TODO: minus czy ten log powinien być?
-            delta = (label - predicted) * derivative(self.stimulations[inputIndex][end_layer_index - 1][k])
 
-            errors_layer.append(delta)
+        if derivative != "softmax":
+            errors_layer = []
+            for k in range(self.neuronsInLayers[end_layer_index]):
+                predicted = self.activations[inputIndex][end_layer_index - 1][k]
+                label = correct[k]
+                # TODO: minus czy ten log powinien być?
+                delta = (label - predicted) * derivative(self.stimulations[inputIndex][end_layer_index - 1][k])
+
+                errors_layer.append(delta)
+            errors_in_input.append(np.array(errors_layer))
+        else:
+            predicted = self.activations[inputIndex][end_layer_index - 1]
+            dx = (np.array(correct) - np.array(predicted))
+            p = dx * predicted
+            errors_in_input.append(p)
         
-        errors_in_input.append(np.array(errors_layer))
         for l in range(hidden_layers):
             errors_layer = []
             derivative = get_derivative_single(self.activationFuncs[act_fun_index - 1 - l])
@@ -88,8 +95,6 @@ class MLP:
             self.weights[1 + l] += LEARNING_COEF * np.matmul(np.array(nth_activs).transpose(), np.array(nth_layer, dtype=np.float32))
             self.biases[1 + l] += LEARNING_COEF * np.sum(np.array(nth_layer, dtype=np.float32), axis=0)
 
-        # print(self.weights)
-        # input()
 
     def calc_activations(self, stimulated, activationFunc):
         return activationFunc(stimulated)

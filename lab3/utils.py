@@ -145,6 +145,8 @@ def get_derivative_single(act_fn):
         return dx_htan_single
     elif act_fn == relu:
         return dx_relu_single
+    elif act_fn == softmax:
+        return "softmax"
     else:
         return dx_softplus_single
 
@@ -168,8 +170,18 @@ def NLL(predictions):
     return results
 
 
-# TODO: czy o to chodzi?
 def label_to_vector(label):
     output = [0,0,0,0,0,0,0,0,0,0]
     output[label] = 1
     return output
+
+
+def cost_single(pred, correct, network):
+    network.stimulations = []
+    network.activations = []
+    return np.sum(-np.log(pred) * correct)
+
+
+def min_cost_func(x_test, y_test, net):
+    inputs = [cost_single(x,y,net) for (x,y) in zip(x_test, y_test)]
+    return min(inputs)
