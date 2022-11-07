@@ -176,6 +176,10 @@ def label_to_vector(label):
     return output
 
 
+def cost_whole(pred, correct):
+    return np.sum(-np.log(pred) * correct)
+
+
 def cost_single(pred, correct, network):
     network.stimulations = []
     network.activations = []

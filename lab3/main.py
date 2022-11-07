@@ -20,7 +20,7 @@ if __name__ == "__main__":
     x_test = np.reshape(x_test, (TEST_SIZE, 784))
 
     network = MLP(layers=3, neuronsInLayers=[
-                  784, 50, 10], activationFuncs=[sigmoid, softmax],
+                  784, 10, 10], activationFuncs=[sigmoid, softmax],
                   standardDev=0.001, batchSize=BATCH_SIZE)
 
     print("1. Continue with existing weights")
@@ -37,6 +37,8 @@ if __name__ == "__main__":
         prev = current
         i = 0
         x_train, y_train = shuffle_training_data(x_train, y_train)
+        predictions = []
+
         while i < DATASET_SIZE / BATCH_SIZE:
             network.activations = []
             network.stimulations = []
@@ -48,13 +50,16 @@ if __name__ == "__main__":
             for j in range(BATCH_SIZE):
                 network.calc_outputs(batch_x[j])
                 network.calc_errors(label_to_vector(batch_y[j]), j)
-            
+                predictions.append(network.activations[-1][-1])
+
             i += 1
             network.update_weights(batch_x)
+
+        vectorized = [label_to_vector(l) for l in y_train]
+        print(f'Cost function: {cost_whole(predictions, vectorized)}')
         
         network.save_to_csv()
-
-        current = min_cost_func(x_test, y_test, network)
+        # current = min_cost_func(x_test, y_test, network)
 
         correct = 0
         for i in range(TEST_SIZE):
