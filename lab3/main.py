@@ -6,7 +6,9 @@ DATASET_SIZE = 60_000
 TEST_SIZE = 10_000
 BATCH_SIZE = 500
 EPOCH_NUM = 10
-EPSILON = 1e-7
+EPSILON = 1000
+LEARNING_COEF = 1e-5
+IS_EARLY_STOPPING = True
 
 def shuffle_training_data(x_train, y_train):
     perm = np.random.permutation(len(x_train))
@@ -21,7 +23,7 @@ if __name__ == "__main__":
 
     network = MLP(layers=3, neuronsInLayers=[
                   784, 50, 10], activationFuncs=[sigmoid, softmax],
-                  standardDev=0.001, batchSize=BATCH_SIZE)
+                  standardDev=0.001, batchSize=BATCH_SIZE, learningCoef=LEARNING_COEF)
 
     print("1. Continue with existing weights")
     print("2. New training")
@@ -32,8 +34,9 @@ if __name__ == "__main__":
 
     current = 0
     prev = float("inf")
-    while True:
-    # while np.power(current - prev, 2) > EPSILON:
+    prevWeights = None
+
+    while np.power(current - prev, 2) > EPSILON:
         prev = current
         i = 0
         x_train, y_train = shuffle_training_data(x_train, y_train)
@@ -42,7 +45,6 @@ if __name__ == "__main__":
         while i < DATASET_SIZE / BATCH_SIZE:
             network.activations = []
             network.stimulations = []
-            # TODO: clearować tu errory czy potrzebne do jakiegoś global checka nauki?
             network.errors = []
             batch_x = x_train[i * BATCH_SIZE : (i+1) * BATCH_SIZE]
             batch_y = y_train[i * BATCH_SIZE : (i+1) * BATCH_SIZE]
@@ -53,31 +55,38 @@ if __name__ == "__main__":
                 predictions.append(network.activations[-1][-1])
 
             i += 1
+            prevWeights = network.weights
             network.update_weights(batch_x)
 
         vectorized = [label_to_vector(l) for l in y_train]
         print(f'Cost function: {cost_whole(predictions, vectorized)}')
         
+        current = cost_whole(predictions, vectorized)
         network.save_to_csv()
-        # current = min_cost_func(x_test, y_test, network)
 
-        correct = 0
-        for i in range(TEST_SIZE):
-            activs = network.test_input(x_test[i])
-            label = max_label(activs)
-            if label == y_test[i]:
-                correct += 1
+        if IS_EARLY_STOPPING and current > prev:
+            network.weights = prevWeights
+
+        accuracy(network, x_test, y_test)
+
+        # correct = 0
+        # for i in range(TEST_SIZE):
+        #     activs = network.test_input(x_test[i])
+        #     label = max_label(activs)
+        #     if label == y_test[i]:
+        #         correct += 1
         
-        print(f'Correct {correct} / 10000')
-        print(f'Percentage: {(correct / TEST_SIZE) * 100}%')
+        # print(f'Correct {correct} / 10000')
+        # print(f'Percentage: {(correct / TEST_SIZE) * 100}%')
 
 
-    correct = 0
-    for i in range(TEST_SIZE):
-        activs = network.test_input(x_test[i])
-        label = max_label(activs)
-        if label == y_test[i]:
-            correct += 1
+    accuracy(network, x_test, y_test)
+    # correct = 0d
+    # for i in range(TEST_SIZE):
+    #     activs = network.test_input(x_test[i])
+    #     label = max_label(activs)
+    #     if label == y_test[i]:
+    #         correct += 1
     
-    print(f'Correct {correct} / 10000')
-    print(f'Percentage: {(correct / TEST_SIZE) * 100}%')
+    # print(f'Correct {correct} / 10000')
+    # print(f'Percentage: {(correct / TEST_SIZE) * 100}%')

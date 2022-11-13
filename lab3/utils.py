@@ -189,3 +189,16 @@ def cost_single(pred, correct, network):
 def min_cost_func(x_test, y_test, net):
     inputs = [cost_single(x,y,net) for (x,y) in zip(x_test, y_test)]
     return min(inputs)
+
+
+def accuracy(network, x_test, y_test):
+    correct = 0
+    for i in range(10_000):
+        activs = network.test_input(x_test[i])
+        label = max_label(activs)
+        if label == y_test[i]:
+            correct += 1
+    
+    print(f'Correct {correct} / 10000')
+    print(f'Percentage: {(correct / 10_000) * 100}%')
+    return correct / 10_000

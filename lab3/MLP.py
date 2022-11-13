@@ -1,11 +1,10 @@
 import numpy as np
 from utils import get_derivative_single
 
-LEARNING_COEF = 1e-5
 
 class MLP:
 
-    def __init__(self, layers, neuronsInLayers, activationFuncs, standardDev, batchSize) -> None:
+    def __init__(self, layers, neuronsInLayers, activationFuncs, standardDev, batchSize, learningCoef) -> None:
         self.howManyLayers = layers
         self.neuronsInLayers = neuronsInLayers
         self.activationFuncs = activationFuncs
@@ -15,6 +14,7 @@ class MLP:
         self.activations = []
         self.errors = []
         self.batchSize = batchSize
+        self.learningCoef = learningCoef
 
         for index in range(len(neuronsInLayers) - 1):
             cur = neuronsInLayers[index]
@@ -51,7 +51,6 @@ class MLP:
             for k in range(self.neuronsInLayers[end_layer_index]):
                 predicted = self.activations[inputIndex][end_layer_index - 1][k]
                 label = correct[k]
-                # TODO: minus czy ten log powinien być?
                 delta = (label - predicted) * derivative(self.stimulations[inputIndex][end_layer_index - 1][k])
 
                 errors_layer.append(delta)
@@ -82,8 +81,8 @@ class MLP:
         for arr in self.errors:
             first_layer.append(arr[0])
 
-        self.weights[0] += LEARNING_COEF * np.matmul(np.array(inputs).transpose(), np.array(first_layer, dtype=np.float32))
-        self.biases[0] += LEARNING_COEF * np.sum(np.array(first_layer, dtype=np.float32), axis=0)
+        self.weights[0] += self.learningCoef * np.matmul(np.array(inputs).transpose(), np.array(first_layer, dtype=np.float32))
+        self.biases[0] += self.learningCoef * np.sum(np.array(first_layer, dtype=np.float32), axis=0)
 
         for l in range(self.howManyLayers - 2):
             nth_layer = []
@@ -92,8 +91,8 @@ class MLP:
                 nth_layer.append(arr[l + 1])
             for arr in self.activations:
                 nth_activs.append(arr[l])
-            self.weights[1 + l] += LEARNING_COEF * np.matmul(np.array(nth_activs).transpose(), np.array(nth_layer, dtype=np.float32))
-            self.biases[1 + l] += LEARNING_COEF * np.sum(np.array(nth_layer, dtype=np.float32), axis=0)
+            self.weights[1 + l] += self.learningCoef * np.matmul(np.array(nth_activs).transpose(), np.array(nth_layer, dtype=np.float32))
+            self.biases[1 + l] += self.learningCoef * np.sum(np.array(nth_layer, dtype=np.float32), axis=0)
 
 
     def calc_activations(self, stimulated, activationFunc):
