@@ -20,7 +20,7 @@ if __name__ == "__main__":
     x_test = np.reshape(x_test, (TEST_SIZE, 784))
 
     network = MLP(layers=3, neuronsInLayers=[
-                  784, 10, 10], activationFuncs=[sigmoid, softmax],
+                  784, 50, 10], activationFuncs=[sigmoid, softmax],
                   standardDev=0.001, batchSize=BATCH_SIZE)
 
     print("1. Continue with existing weights")
