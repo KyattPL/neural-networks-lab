@@ -26,8 +26,6 @@ if __name__ == "__main__":
                   784, 10, 10], activationFuncs=[sigmoid, softmax],
                   standardDev=0.001, batchSize=BATCH_SIZE, learningCoef=LEARNING_COEF)
 
-    network.save_to_csv('_og')
-
     print("1. Continue with existing weights")
     print("2. New training")
     print("3. New with OG weights")
@@ -85,7 +83,7 @@ if __name__ == "__main__":
         errorsList.append(1 - acc)
 
 
-    accuracy(network, x_test, y_test)
+    #accuracy(network, x_test, y_test)
     plt.plot(np.array(epochsList), np.array(errorsList))
 
     plt.title("Błąd na zbiorze testowym")
