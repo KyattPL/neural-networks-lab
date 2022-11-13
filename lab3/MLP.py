@@ -98,17 +98,17 @@ class MLP:
     def calc_activations(self, stimulated, activationFunc):
         return activationFunc(stimulated)
 
-    def save_to_csv(self):
-        np.savez('weights.csv', *self.weights)
-        np.savez('biases.csv', *self.biases)
+    def save_to_csv(self, filePart=''):
+        np.savez(f'weights{filePart}.csv', *self.weights)
+        np.savez(f'biases{filePart}.csv', *self.biases)
 
-    def read_from_csv(self):
-        weightsData = np.load('weights.csv.npz')
+    def read_from_csv(self, filePart=''):
+        weightsData = np.load(f'weights{filePart}.csv.npz')
         self.weights = []
         for name in weightsData.files:
             self.weights.append(weightsData[name])
         
-        biasesData = np.load('biases.csv.npz')
+        biasesData = np.load(f'biases{filePart}.csv.npz')
         self.biases = []
         for name in biasesData.files:
             self.biases.append(biasesData[name])

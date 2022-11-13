@@ -1,6 +1,7 @@
 from utils import *
 from MLP import MLP
 from keras.datasets import mnist
+import matplotlib.pyplot as plt
 
 DATASET_SIZE = 60_000
 TEST_SIZE = 10_000
@@ -22,19 +23,30 @@ if __name__ == "__main__":
     x_test = np.reshape(x_test, (TEST_SIZE, 784))
 
     network = MLP(layers=3, neuronsInLayers=[
-                  784, 50, 10], activationFuncs=[sigmoid, softmax],
+                  784, 10, 10], activationFuncs=[sigmoid, softmax],
                   standardDev=0.001, batchSize=BATCH_SIZE, learningCoef=LEARNING_COEF)
+
+    network.save_to_csv('_og')
 
     print("1. Continue with existing weights")
     print("2. New training")
+    print("3. New with OG weights")
     choice = int(input().strip())
 
     if choice == 1:
         network.read_from_csv()
+    elif choice == 3:
+        network.read_from_csv('_og')
 
     current = 0
     prev = float("inf")
     prevWeights = None
+    epochs = 0
+    epochsList = []
+    errorsList = []
+    confusionMatrix = []
+    for i in range(10):
+        confusionMatrix.append([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
     while np.power(current - prev, 2) > EPSILON:
         prev = current
@@ -67,26 +79,17 @@ if __name__ == "__main__":
         if IS_EARLY_STOPPING and current > prev:
             network.weights = prevWeights
 
-        accuracy(network, x_test, y_test)
-
-        # correct = 0
-        # for i in range(TEST_SIZE):
-        #     activs = network.test_input(x_test[i])
-        #     label = max_label(activs)
-        #     if label == y_test[i]:
-        #         correct += 1
-        
-        # print(f'Correct {correct} / 10000')
-        # print(f'Percentage: {(correct / TEST_SIZE) * 100}%')
+        epochs += 1
+        epochsList.append(epochs)
+        acc = accuracy(network, x_test, y_test, confusionMatrix)
+        errorsList.append(1 - acc)
 
 
     accuracy(network, x_test, y_test)
-    # correct = 0d
-    # for i in range(TEST_SIZE):
-    #     activs = network.test_input(x_test[i])
-    #     label = max_label(activs)
-    #     if label == y_test[i]:
-    #         correct += 1
-    
-    # print(f'Correct {correct} / 10000')
-    # print(f'Percentage: {(correct / TEST_SIZE) * 100}%')
+    plt.plot(np.array(epochsList), np.array(errorsList))
+
+    plt.title("Błąd na zbiorze testowym")
+    plt.xlabel("Liczba epok")
+    plt.ylabel("Błąd")
+
+    plt.show()
