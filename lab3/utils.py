@@ -79,7 +79,7 @@ def relu(stimulations):
         if z < 0:
             activated.append(0)
         else:
-            activated.append(z)
+            activated.append(min(z, 5))
 
     return activated
 
@@ -191,14 +191,15 @@ def min_cost_func(x_test, y_test, net):
     return min(inputs)
 
 
-def accuracy(network, x_test, y_test, confMatrix):
+def accuracy(network, x_test, y_test, confMatrix=None):
     correct = 0
     for i in range(10_000):
         activs = network.test_input(x_test[i])
         label = max_label(activs)
         if label == y_test[i]:
             correct += 1
-        confMatrix[label][y_test[i]] += 1
+        if confMatrix is not None:
+            confMatrix[label][y_test[i]] += 1
     
     print(f'Correct {correct} / 10000')
     print(f'Percentage: {(correct / 10_000) * 100}%')
