@@ -22,3 +22,11 @@ VALIDATION_PERCENT = 0.1
     - POOL_TYPE         = [AVG, MAX, GAVG, GMAX]
 3. Ocena efektywności techniki dropout:
     - DROPOUT_RATE      = [0.01, 0.05, 0.1, 0.2, 0.4]
+
+Cross-Entropy = 0.00: Perfect probabilities.
+Cross-Entropy < 0.02: Great probabilities.
+Cross-Entropy < 0.05: On the right track.
+Cross-Entropy < 0.20: Fine.
+Cross-Entropy > 0.30: Not great.
+Cross-Entropy > 1.00: Terrible.
+Cross-Entropy > 2.00 Something is broken.
