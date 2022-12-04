@@ -1,0 +1,24 @@
+Domyślne wartości:
+NUM_NEURONS_FIRST = 128
+NUM_NEURONS_OUT = 10
+NUM_FILTERS = 32
+KERNEL_X = 3
+KERNEL_Y = 3
+KERNEL_STRIDE = 1
+POOL_X = 2
+POOL_Y = 2
+POOL_STRIDE = 2
+BATCH_SIZE = 128
+EPOCHS = 10
+VALIDATION_PERCENT = 0.1
+
+1. Porównanie sieci konwolucyjnej i MLP:
+    - BATCH_SIZE        = [5, 20, 100, 500, 1000]
+    - EPOCHS            = [3, 5, 10, 15, 20]
+    - NEURONS/FILTERS   = [10/10, 50/20, 100/30, 200/40, 250/50]
+2. Rozmiar okna poolingu i typ poolingu:
+    - POOL_SQUARE       = [2, 3, 4, 5, 6]
+    - POOL_RECT         = [2x1, 1x2, 2x3, 3x2, 1x5, 5x1]
+    - POOL_TYPE         = [AVG, MAX, GAVG, GMAX]
+3. Ocena efektywności techniki dropout:
+    - DROPOUT_RATE      = [0.01, 0.05, 0.1, 0.2, 0.4]
