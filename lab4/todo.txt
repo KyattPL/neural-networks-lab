@@ -15,7 +15,7 @@ VALIDATION_PERCENT = 0.1
 1. Porównanie sieci konwolucyjnej i MLP:
     - BATCH_SIZE        = [5, 20, 100, 500, 1000]
     - EPOCHS            = [3, 5, 10, 15, 20]
-    - NEURONS/FILTERS   = [10/10, 50/20, 100/30, 200/40, 250/50]
+    - NEURONS/FILTERS   = [(10, 10), (50,20), (100,30), (200,40), (250,50)]
 2. Rozmiar okna poolingu i typ poolingu:
     - POOL_SQUARE       = [2, 3, 4, 5, 6]
     - POOL_RECT         = [2x1, 1x2, 2x3, 3x2, 1x5, 5x1]

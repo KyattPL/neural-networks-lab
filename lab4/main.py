@@ -20,16 +20,17 @@ VALIDATION_PERCENT = 0.1
 num_classes = 10
 input_shape = (28, 28, 1)
 
-# pool_sizes = [(2, 1), (1, 2), (2, 3), (3, 2), (1, 5), (5, 1)]
+batches = [5, 20, 100, 500, 1000]
 # names = ['MAX', 'AVG', 'GMAX', 'GAVG']
 # pools = [layers.MaxPooling2D(pool_size=(POOL_X, POOL_Y), strides=POOL_STRIDE),
 #         layers.AveragePooling2D(pool_size=(POOL_X, POOL_Y), strides=POOL_STRIDE),
 #         layers.GlobalMaxPooling2D(),
 #         layers.GlobalAveragePooling2D()]
 
-dropout_rates = [0.01, 0.05, 0.1, 0.2, 0.4]
+# dropout_rates = [0.01, 0.05, 0.1, 0.2, 0.4]
 
-for dropout_rate in dropout_rates:
+# i = 0
+for curr_batch in batches:
 
     # Load the data and split it between train and test sets
     (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
@@ -52,7 +53,6 @@ for dropout_rate in dropout_rates:
             keras.Input(shape=input_shape),
             layers.Flatten(),
             layers.Dense(NUM_NEURONS_FIRST, activation="relu"),
-            layers.Dropout(dropout_rate),
             layers.Dense(NUM_NEURONS_OUT, activation="softmax")
         ]
     )
@@ -62,13 +62,12 @@ for dropout_rate in dropout_rates:
             keras.Input(shape=input_shape),
             layers.Conv2D(NUM_FILTERS, kernel_size=(KERNEL_X, KERNEL_Y), activation="relu", strides=KERNEL_STRIDE),
             layers.MaxPooling2D(pool_size=(POOL_X, POOL_Y), strides=POOL_STRIDE),
-            layers.Dropout(dropout_rate),
             layers.Flatten(),
             layers.Dense(num_classes, activation="softmax")
         ]
     )
 
-    batch_size = BATCH_SIZE
+    batch_size = curr_batch
     epochs = EPOCHS
 
     model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=["accuracy"])
@@ -92,7 +91,9 @@ for dropout_rate in dropout_rates:
     plt.ylabel('precyzja')
     plt.xlabel('epoki')
     plt.legend(['train', 'test'], loc='upper left')
-    plt.savefig(f'plots/CNN-acc-dropout-{dropout_rate}.png')
+    plt.savefig(f'plots/CNN-acc-batch-{curr_batch}.png')
+
+    plt.clf()
 
     plt.plot(mnist_history.history['accuracy'])
     plt.plot(mnist_history.history['val_accuracy'])
@@ -100,7 +101,9 @@ for dropout_rate in dropout_rates:
     plt.ylabel('precyzja')
     plt.xlabel('epoki')
     plt.legend(['train', 'test'], loc='upper left')
-    plt.savefig(f'plots/MLP-acc-dropout-{dropout_rate}.png')
+    plt.savefig(f'plots/MLP-acc-batch-{curr_batch}.png')
+
+    plt.clf()
 
     plt.plot(model_history.history['loss'])
     plt.plot(model_history.history['val_loss'])
@@ -108,12 +111,17 @@ for dropout_rate in dropout_rates:
     plt.ylabel('strata')
     plt.xlabel('epoki')
     plt.legend(['train', 'test'], loc='upper left')
-    plt.savefig(f'plots/CNN-loss-dropout-{dropout_rate}.png')
+    plt.savefig(f'plots/CNN-loss-batch-{curr_batch}.png')
 
+    plt.clf()
+
+    # i += 1
     plt.plot(mnist_history.history['loss'])
     plt.plot(mnist_history.history['val_loss'])
     plt.title('Strata modelu - MLP')
     plt.ylabel('strata')
     plt.xlabel('epoki')
     plt.legend(['train', 'test'], loc='upper left')
-    plt.savefig(f'plots/MLP-loss-dropout-{dropout_rate}.png')
+    plt.savefig(f'plots/MLP-loss-batch-{curr_batch}.png')
+
+    plt.clf()
