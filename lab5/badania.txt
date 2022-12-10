@@ -1,0 +1,7 @@
+RNN vs LSTM:
+- embedding: [30, 50, 80, 120, 150]
+- output dims: [30, 50, 80, 120, 150]
+- activation func: ['tanh', 'sigmoid', 'relu']
+
+Padding:
+- maxLen: [50, 80, 100, 130, 150]
